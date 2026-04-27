@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../app/Livewire/**/*.php';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+
+    /* Brand blues */
+    --color-brand-50:  #e6f4f9;
+    --color-brand-100: #b3dcee;
+    --color-brand-200: #80c4e3;
+    --color-brand-300: #4dacd8;
+    --color-brand-400: #2694cd;
+    --color-brand-500: #0077b6;
+    --color-brand-600: #005f92;
+    --color-brand-700: #004e7a;
+    --color-brand-800: #003d61;
+    --color-brand-900: #002f4d;
+
+    /* Zinc palette */
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-brand-500);
+    --color-accent-content: var(--color-brand-500);
+    --color-accent-foreground: var(--color-white);
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Admin sidebar active state */
+.admin-nav-link.active {
+    @apply bg-brand-700 text-white;
+}
+
+/* Toast notification */
+.toast-enter {
+    animation: toast-in 0.3s ease-out;
+}
+@keyframes toast-in {
+    from { opacity: 0; transform: translateY(1rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
