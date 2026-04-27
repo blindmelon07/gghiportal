@@ -33,4 +33,5 @@ Route::middleware(['auth:admin'])->prefix('admin')->name('admin.')->group(functi
     Route::get('gallery', App\Livewire\Admin\Gallery\GalleryIndex::class)->name('gallery.index');
     Route::get('site-info', App\Livewire\Admin\SiteInfo\SiteInfoEditor::class)->name('site-info');
     Route::get('messages', App\Livewire\Admin\ContactMessages\MessageIndex::class)->name('messages.index');
+    Route::get('change-password', App\Livewire\Admin\ChangePassword::class)->name('change-password');
 });

@@ -28,7 +28,7 @@
                 <a href="{{ route('blog.index') }}" class="text-gray-600 hover:text-brand-600 transition-colors text-sm font-medium">Blog</a>
                 <a href="{{ route('home') }}#contact" class="text-gray-600 hover:text-brand-600 transition-colors text-sm font-medium">Contact</a>
                 <a href="tel:+639703117315" class="bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full hover:bg-red-700 transition-colors">🚨 +63 970 311 7315</a>
-                <a href="{{ route('home') }}#contact" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm shadow-sm transition-all duration-200">Book Appointment</a>
+                <a href="https://gghiconnect.com/doctors" target="_blank" rel="noopener noreferrer" class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm shadow-sm transition-all duration-200">Book Appointment</a>
             </nav>
 
             <button @click="open = !open" class="md:hidden text-gray-600 hover:text-brand-600 p-2 focus-visible:ring-2 focus-visible:ring-brand-400 rounded" aria-label="Toggle menu">
@@ -49,7 +49,7 @@
                 <a href="{{ route('blog.index') }}" class="text-gray-600 hover:text-brand-600 py-1 text-sm font-medium">Blog</a>
                 <a href="{{ route('home') }}#contact" class="text-gray-600 hover:text-brand-600 py-1 text-sm font-medium">Contact</a>
                 <a href="tel:+639703117315" class="bg-red-600 text-white text-center font-bold px-4 py-2 rounded-full text-sm">🚨 +63 970 311 7315</a>
-                <a href="{{ route('home') }}#contact" class="bg-brand-500 text-white text-center font-semibold px-4 py-2 rounded-xl text-sm">Book Appointment</a>
+                <a href="https://gghiconnect.com/doctors" target="_blank" rel="noopener noreferrer" class="bg-brand-500 text-white text-center font-semibold px-4 py-2 rounded-xl text-sm">Book Appointment</a>
             </nav>
         </div>
     </div>

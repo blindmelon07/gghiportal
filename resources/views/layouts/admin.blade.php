@@ -28,11 +28,11 @@
     {{-- Sidebar --}}
     <aside
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-        class="fixed inset-y-0 left-0 z-40 w-64 bg-brand-900 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-auto"
+        class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:inset-auto"
         aria-label="Admin sidebar">
-        <div class="flex flex-col items-center px-6 py-5 border-b border-blue-800 gap-2">
-            <img src="/images/gghi-logo.png" alt="GSAC General Hospital Inc." class="h-10 w-auto">
-            <span class="text-blue-300 text-xs font-medium tracking-widest uppercase">Admin Portal</span>
+        <div class="flex flex-col items-center px-6 py-4 border-b border-gray-100 gap-1">
+            <img src="/images/gghi-logo.png" alt="GSAC General Hospital Inc." class="h-12 w-auto">
+            <span class="text-brand-500 text-xs font-semibold tracking-widest uppercase">Admin Portal</span>
         </div>
 
         <nav class="px-4 py-6 space-y-1" aria-label="Admin navigation">
@@ -45,12 +45,13 @@
                     ['route' => 'admin.gallery.index', 'label' => 'Gallery', 'icon' => 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'],
                     ['route' => 'admin.site-info', 'label' => 'Site Info', 'icon' => 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
                     ['route' => 'admin.messages.index', 'label' => 'Messages', 'icon' => 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'],
+                    ['route' => 'admin.change-password', 'label' => 'Change Password', 'icon' => 'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z'],
                 ];
             @endphp
             @foreach($navLinks as $link)
                 <a href="{{ route($link['route']) }}"
                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                          {{ request()->routeIs($link['route']) ? 'bg-brand-700 text-white' : 'text-gray-300 hover:bg-blue-800 hover:text-white' }}">
+                          {{ request()->routeIs($link['route']) ? 'bg-brand-50 text-brand-700 border border-brand-100' : 'text-gray-600 hover:bg-gray-50 hover:text-brand-600' }}">
                     <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $link['icon'] }}"/>
                     </svg>
@@ -58,10 +59,10 @@
                 </a>
             @endforeach
 
-            <div class="pt-4 mt-4 border-t border-blue-800">
+            <div class="pt-4 mt-4 border-t border-gray-100">
                 <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-300 hover:bg-red-700 hover:text-white transition-colors">
+                    <button type="submit" class="flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
