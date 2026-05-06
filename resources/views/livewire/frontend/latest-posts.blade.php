@@ -11,7 +11,18 @@
         @foreach($posts as $post)
         <article class="bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow overflow-hidden flex flex-col">
             <div class="relative h-48 overflow-hidden bg-brand-50">
-                @if($post->cover_image_path)
+                @if($post->isVideo())
+                    <div class="w-full h-full flex items-center justify-center bg-gray-900">
+                        @if($post->cover_image_path)
+                            <img src="{{ $post->cover_image_path }}" alt="{{ $post->title }}" class="w-full h-full object-cover opacity-60">
+                        @endif
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div style="width:52px;height:52px;background:rgba(255,0,0,.85);border-radius:50%;display:flex;align-items:center;justify-content:center">
+                                <svg style="width:22px;height:22px;fill:white;margin-left:4px" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                @elseif($post->cover_image_path)
                     <img src="{{ $post->cover_image_path }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
                 @else
                     <div class="w-full h-full flex items-center justify-center bg-brand-50">
@@ -20,8 +31,10 @@
                         </svg>
                     </div>
                 @endif
-                @if($post->category)
-                <span class="absolute top-3 left-3 bg-brand-500 text-white text-xs font-medium px-2.5 py-1 rounded-full">{{ $post->category }}</span>
+                @if($post->isVideo())
+                    <span class="absolute top-3 left-3 text-xs font-bold px-2.5 py-1 rounded-full" style="background:#ff0000;color:#fff">▶ VIDEO</span>
+                @elseif($post->category)
+                    <span class="absolute top-3 left-3 bg-brand-500 text-white text-xs font-medium px-2.5 py-1 rounded-full">{{ $post->category }}</span>
                 @endif
             </div>
             <div class="p-5 flex flex-col flex-1">

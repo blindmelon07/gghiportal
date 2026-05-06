@@ -18,6 +18,9 @@ class PostForm extends Component
 
     public ?Post $post = null;
 
+    public string $post_type = 'article';
+    public string $video_url = '';
+
     #[Validate('required|min:3|max:255')]
     public string $title = '';
     public string $slug = '';
@@ -25,7 +28,6 @@ class PostForm extends Component
     #[Validate('required|min:3|max:255')]
     public string $author_name = '';
     public string $excerpt = '';
-    #[Validate('required|min:10')]
     public string $body = '';
     public bool $is_published = false;
     public $cover_image;
@@ -36,6 +38,8 @@ class PostForm extends Component
     {
         if ($post && $post->exists) {
             $this->post          = $post;
+            $this->post_type     = $post->post_type ?? 'article';
+            $this->video_url     = $post->video_url ?? '';
             $this->title         = $post->title;
             $this->slug          = $post->slug;
             $this->category      = $post->category ?? '';
@@ -68,7 +72,21 @@ class PostForm extends Component
 
     public function save()
     {
-        $this->validate();
+        $rules = [
+            'title'       => 'required|min:3|max:255',
+            'author_name' => 'required|min:3|max:255',
+            'post_type'   => 'required|in:article,video',
+        ];
+
+        if ($this->post_type === 'article') {
+            $rules['body'] = 'required|min:10';
+        }
+
+        if ($this->post_type === 'video') {
+            $rules['video_url'] = 'required|url';
+        }
+
+        $this->validate($rules);
 
         if ($this->cover_image) {
             $this->validate(['cover_image' => 'file|mimes:jpg,jpeg,png,gif,webp,svg,heic,heif|max:10240']);
@@ -79,6 +97,8 @@ class PostForm extends Component
         }
 
         $data = [
+            'post_type'    => $this->post_type,
+            'video_url'    => $this->post_type === 'video' ? $this->video_url : null,
             'title'        => $this->title,
             'slug'         => $this->slug ?: Str::slug($this->title),
             'category'     => $this->category,

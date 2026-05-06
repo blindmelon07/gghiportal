@@ -11,6 +11,45 @@
 
     <form wire:submit="save" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-5">
+
+            {{-- Post Type Switcher --}}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Post Type</label>
+                <div class="flex gap-3">
+                    <label class="flex-1 flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-colors {{ $post_type === 'article' ? 'border-brand-500 bg-brand-50' : 'border-gray-200 hover:border-gray-300' }}">
+                        <input type="radio" wire:model.live="post_type" value="article" class="text-brand-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">📝 Article</p>
+                            <p class="text-xs text-gray-400">Text content with images</p>
+                        </div>
+                    </label>
+                    <label class="flex-1 flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-colors {{ $post_type === 'video' ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300' }}">
+                        <input type="radio" wire:model.live="post_type" value="video" class="text-red-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">🎬 Video</p>
+                            <p class="text-xs text-gray-400">YouTube or Vimeo embed</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            {{-- Video URL (only for video posts) --}}
+            @if($post_type === 'video')
+            <div class="bg-white rounded-xl shadow-sm border border-red-100 p-5">
+                <label class="block text-sm font-semibold text-gray-700 mb-1">Video URL <span class="text-red-500">*</span></label>
+                <p class="text-xs text-gray-400 mb-3">Paste a YouTube or Vimeo link (e.g. https://youtube.com/watch?v=...)</p>
+                <input type="url" wire:model="video_url" placeholder="https://www.youtube.com/watch?v=..."
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-red-400 @error('video_url') border-red-400 @enderror">
+                @error('video_url') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+
+                @if($video_url)
+                <div class="mt-3 text-xs text-gray-400">
+                    Preview will appear on the post page after saving.
+                </div>
+                @endif
+            </div>
+            @endif
+
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
@@ -43,7 +82,8 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Body <span class="text-red-500">*</span>
+                        Body
+                        @if($post_type === 'article') <span class="text-red-500">*</span> @endif
                         <span class="text-gray-400 font-normal">(Markdown supported)</span>
                     </label>
                     <textarea wire:model="body" rows="14"
@@ -52,7 +92,8 @@
                 </div>
             </div>
 
-            {{-- Slider Images --}}
+            {{-- Slider Images (article only) --}}
+            @if($post_type === 'article')
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <h3 class="text-sm font-semibold text-gray-700 mb-1">Slider Images</h3>
                 <p class="text-xs text-gray-400 mb-4">These appear as a slideshow on the post page. Upload multiple images.</p>
@@ -96,8 +137,8 @@
                     </div>
                 </div>
                 @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
+            @endif {{-- end article-only slider section --}}
         </div>
 
         <div class="space-y-5">

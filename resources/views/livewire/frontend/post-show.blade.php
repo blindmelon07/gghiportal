@@ -2,8 +2,21 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
         {{-- Article --}}
         <article class="lg:col-span-3">
+            {{-- Video Player --}}
+            @if($post->isVideo() && $post->embedUrl())
+            <div style="position:relative;width:100%;padding-bottom:56.25%;border-radius:1rem;overflow:hidden;background:#000;box-shadow:0 10px 40px rgba(0,0,0,.15);margin-bottom:2rem">
+                <iframe
+                    src="{{ $post->embedUrl() }}"
+                    style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
+            </div>
+            @endif
+
             {{-- Image Slider with Lightbox --}}
-            @if($slideImages->isNotEmpty())
+            @if(!$post->isVideo() && $slideImages->isNotEmpty())
             @php $images = $slideImages->pluck('image_path')->values()->toArray(); @endphp
             <div x-data="{
                     current: 0,
@@ -116,7 +129,7 @@
                     @endif
                 </div>
             </div>
-            @elseif($post->cover_image_path)
+            @elseif(!$post->isVideo() && $post->cover_image_path)
             <img src="{{ $post->cover_image_path }}" alt="{{ $post->title }}" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8">
             @endif
 
