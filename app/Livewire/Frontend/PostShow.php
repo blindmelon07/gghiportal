@@ -13,7 +13,7 @@ class PostShow extends Component
 
     public function mount(string $slug): void
     {
-        $this->post = Post::published()->where('slug', $slug)->firstOrFail();
+        $this->post = Post::with('images')->published()->where('slug', $slug)->firstOrFail();
     }
 
     public function render()

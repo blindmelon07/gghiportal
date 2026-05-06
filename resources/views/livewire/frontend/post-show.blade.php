@@ -2,8 +2,49 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-10">
         {{-- Article --}}
         <article class="lg:col-span-3">
-            {{-- Cover Image --}}
-            @if($post->cover_image_path)
+            {{-- Image Slider or Cover --}}
+            @if($post->images->isNotEmpty())
+            <div
+                x-data="{
+                    current: 0,
+                    total: {{ $post->images->count() }},
+                    prev() { this.current = (this.current - 1 + this.total) % this.total; },
+                    next() { this.current = (this.current + 1) % this.total; }
+                }"
+                class="relative w-full h-64 md:h-96 rounded-2xl overflow-hidden mb-8 bg-gray-100">
+
+                @foreach($post->images as $i => $img)
+                <div x-show="current === {{ $i }}"
+                    x-transition:enter="transition-opacity duration-500"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition-opacity duration-500"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="absolute inset-0">
+                    <img src="{{ $img->image_path }}" alt="{{ $post->title }}" class="w-full h-full object-cover">
+                </div>
+                @endforeach
+
+                @if($post->images->count() > 1)
+                <button @click="prev()"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors">
+                    ‹
+                </button>
+                <button @click="next()"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors">
+                    ›
+                </button>
+                <div class="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+                    @foreach($post->images as $i => $img)
+                    <button @click="current = {{ $i }}"
+                        :class="current === {{ $i }} ? 'bg-white w-5' : 'bg-white/50 w-2'"
+                        class="h-2 rounded-full transition-all duration-300"></button>
+                    @endforeach
+                </div>
+                @endif
+            </div>
+            @elseif($post->cover_image_path)
             <img src="{{ $post->cover_image_path }}" alt="{{ $post->title }}" class="w-full h-64 md:h-80 object-cover rounded-2xl mb-8">
             @endif
 

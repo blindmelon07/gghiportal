@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Posts;
 
 use App\Models\Post;
+use App\Models\PostImage;
 use App\Traits\ImageUploadTrait;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -29,18 +30,19 @@ class PostForm extends Component
     public bool $is_published = false;
     public $cover_image;
     public ?string $existingImage = null;
+    public array $newImages = [];
 
     public function mount(?Post $post = null): void
     {
         if ($post && $post->exists) {
-            $this->post = $post;
-            $this->title        = $post->title;
-            $this->slug         = $post->slug;
-            $this->category     = $post->category ?? '';
-            $this->author_name  = $post->author_name;
-            $this->excerpt      = $post->excerpt ?? '';
-            $this->body         = $post->body;
-            $this->is_published = $post->is_published;
+            $this->post          = $post;
+            $this->title         = $post->title;
+            $this->slug          = $post->slug;
+            $this->category      = $post->category ?? '';
+            $this->author_name   = $post->author_name;
+            $this->excerpt       = $post->excerpt ?? '';
+            $this->body          = $post->body;
+            $this->is_published  = $post->is_published;
             $this->existingImage = $post->cover_image_path;
         }
     }
@@ -52,23 +54,42 @@ class PostForm extends Component
         }
     }
 
+    public function removeNewImage(int $index): void
+    {
+        array_splice($this->newImages, $index, 1);
+    }
+
+    public function deleteSlideImage(int $id): void
+    {
+        $img = PostImage::findOrFail($id);
+        $this->deleteImage($img->image_path);
+        $img->delete();
+    }
+
     public function save()
     {
         $this->validate();
 
+        if ($this->cover_image) {
+            $this->validate(['cover_image' => 'file|mimes:jpg,jpeg,png,gif,webp,svg,heic,heif|max:10240']);
+        }
+
+        if (!empty($this->newImages)) {
+            $this->validate(['newImages.*' => 'file|mimes:jpg,jpeg,png,gif,webp,svg,heic,heif|max:10240']);
+        }
+
         $data = [
-            'title'       => $this->title,
-            'slug'        => $this->slug ?: Str::slug($this->title),
-            'category'    => $this->category,
-            'author_name' => $this->author_name,
-            'excerpt'     => $this->excerpt,
-            'body'        => $this->body,
-            'is_published'=> $this->is_published,
-            'published_at'=> $this->is_published ? ($this->post?->published_at ?? now()) : null,
+            'title'        => $this->title,
+            'slug'         => $this->slug ?: Str::slug($this->title),
+            'category'     => $this->category,
+            'author_name'  => $this->author_name,
+            'excerpt'      => $this->excerpt,
+            'body'         => $this->body,
+            'is_published' => $this->is_published,
+            'published_at' => $this->is_published ? ($this->post?->published_at ?? now()) : null,
         ];
 
         if ($this->cover_image) {
-            $this->validate(['cover_image' => 'file|mimes:jpg,jpeg,png,gif,webp,svg,heic,heif|max:10240']);
             if ($this->existingImage) {
                 $this->deleteImage($this->existingImage);
             }
@@ -77,8 +98,16 @@ class PostForm extends Component
 
         if ($this->post?->exists) {
             $this->post->update($data);
+            $post = $this->post;
         } else {
-            Post::create($data);
+            $post = Post::create($data);
+        }
+
+        foreach ($this->newImages as $img) {
+            $post->images()->create([
+                'image_path' => $this->uploadImage($img, 'posts'),
+                'sort_order' => $post->images()->count(),
+            ]);
         }
 
         session()->flash('success', 'Post saved successfully.');
@@ -88,7 +117,8 @@ class PostForm extends Component
     public function render()
     {
         return view('livewire.admin.posts.post-form', [
-            'pageTitle' => $this->post?->exists ? 'Edit Post' : 'Create Post',
+            'pageTitle'   => $this->post?->exists ? 'Edit Post' : 'Create Post',
+            'slideImages' => $this->post?->images()->get() ?? collect(),
         ])->title($this->post?->exists ? 'Edit Post' : 'Create Post');
     }
 }

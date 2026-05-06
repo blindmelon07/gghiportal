@@ -51,6 +51,57 @@
                     @error('body') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
             </div>
+
+            {{-- Slider Images --}}
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <h3 class="text-sm font-semibold text-gray-700 mb-1">Slider Images</h3>
+                <p class="text-xs text-gray-400 mb-4">These appear as a slideshow on the post page. Upload multiple images.</p>
+
+                {{-- Existing slider images --}}
+                @if($slideImages->isNotEmpty())
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                    @foreach($slideImages as $img)
+                    <div class="relative group">
+                        <img src="{{ $img->image_path }}" class="w-full h-28 object-cover rounded-lg">
+                        <button type="button"
+                            wire:click="deleteSlideImage({{ $img->id }})"
+                            wire:confirm="Remove this slide image?"
+                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            ✕
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+
+                {{-- New image previews --}}
+                @if(!empty($newImages))
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                    @foreach($newImages as $i => $img)
+                    <div class="relative group">
+                        @if(in_array(strtolower($img->getClientOriginalExtension()), ['jpg','jpeg','png','gif','webp','svg']))
+                            <img src="{{ $img->temporaryUrl() }}" class="w-full h-28 object-cover rounded-lg">
+                        @else
+                            <div class="w-full h-28 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500 px-2 text-center">
+                                {{ $img->getClientOriginalName() }}
+                            </div>
+                        @endif
+                        <button type="button"
+                            wire:click="removeNewImage({{ $i }})"
+                            class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            ✕
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
+
+                <input type="file" wire:model="newImages" multiple
+                    accept="image/*,.heic,.heif"
+                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+                <div wire:loading wire:target="newImages" class="text-xs text-gray-400 mt-1">Processing...</div>
+                @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
         </div>
 
         <div class="space-y-5">
@@ -74,8 +125,10 @@
                 </button>
             </div>
 
+            {{-- Cover Image --}}
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">Cover Image</h3>
+                <h3 class="text-sm font-semibold text-gray-700 mb-1">Cover Image</h3>
+                <p class="text-xs text-gray-400 mb-3">Shown in post listings and as the hero image.</p>
                 @if($existingImage && ! $cover_image)
                     <img src="{{ $existingImage }}" alt="Cover" class="w-full h-32 object-cover rounded-lg mb-3">
                 @endif
