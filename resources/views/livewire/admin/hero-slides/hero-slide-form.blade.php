@@ -34,7 +34,7 @@
             {{-- Live Preview --}}
             @if($existingImage || $image)
             <div class="relative rounded-xl overflow-hidden mt-4">
-                <img src="{{ $image ? $image->temporaryUrl() : $existingImage }}" alt="Preview" class="w-full h-44 object-cover">
+                <img src="{{ $existingImage }}" alt="Preview" class="w-full h-44 object-cover" id="hero-preview">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex flex-col items-center justify-center text-center p-4">
                     <p class="text-white font-bold text-lg">{{ $title ?: 'Slide Title' }}</p>
                     <p class="text-gray-300 text-sm mt-1">{{ $subtitle ?: 'Subtitle goes here' }}</p>
@@ -66,15 +66,20 @@
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+                x-data="{ previewUrl: '{{ $existingImage ?? '' }}' }">
                 <h3 class="text-sm font-semibold text-gray-700 mb-3">Slide Image</h3>
-                @if($existingImage && ! $image)
-                    <img src="{{ $existingImage }}" alt="Current" class="w-full h-24 object-cover rounded-lg mb-3">
-                @endif
-                @if($image)
-                    <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="w-full h-24 object-cover rounded-lg mb-3">
-                @endif
+                <img x-show="previewUrl" :src="previewUrl" alt="Preview"
+                    class="w-full h-24 object-cover rounded-lg mb-3">
                 <input type="file" wire:model="image" accept="image/*"
+                    @change="
+                        const file = $event.target.files[0];
+                        if (file && file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = e => { previewUrl = e.target.result; document.getElementById('hero-preview').src = e.target.result; };
+                            reader.readAsDataURL(file);
+                        }
+                    "
                     class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3">
                 @error('image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
