@@ -53,9 +53,7 @@
             </div>
 
             {{-- Slider Images --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
-                x-data="{ previews: [] }"
-                x-on:livewire-upload-finish="previews = []">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <h3 class="text-sm font-semibold text-gray-700 mb-1">Slider Images</h3>
                 <p class="text-xs text-gray-400 mb-4">These appear as a slideshow on the post page. Upload multiple images.</p>
 
@@ -76,33 +74,20 @@
                 </div>
                 @endif
 
-                {{-- Client-side previews --}}
-                <template x-if="previews.length > 0">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
-                        <template x-for="(src, i) in previews" :key="i">
-                            <div class="relative">
-                                <img :src="src" class="w-full h-28 object-cover rounded-lg">
-                            </div>
-                        </template>
-                    </div>
-                </template>
-
-                <div wire:ignore>
-                    <input type="file" wire:model="newImages" multiple
-                        accept="image/*,.heic,.heif"
-                        @change="
-                            previews = [];
-                            Array.from($event.target.files).forEach(file => {
-                                if (file.type.startsWith('image/')) {
-                                    const reader = new FileReader();
-                                    reader.onload = e => previews.push(e.target.result);
-                                    reader.readAsDataURL(file);
-                                }
-                            });
-                        "
-                        class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+                @if(count($newImages) > 0)
+                <div class="flex items-center gap-2 mb-3 text-sm text-green-600 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 00-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clip-rule="evenodd"/></svg>
+                    {{ count($newImages) }} image(s) ready — click Save Post to upload
                 </div>
-                <div wire:loading wire:target="newImages" class="text-xs text-gray-400 mt-1">Processing...</div>
+                @endif
+
+                <input type="file" wire:model="newImages" multiple
+                    accept="image/*,.heic,.heif"
+                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+                <div wire:loading wire:target="newImages" class="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                    <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                    Uploading...
+                </div>
                 @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
