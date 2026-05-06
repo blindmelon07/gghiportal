@@ -81,13 +81,21 @@
                 </div>
                 @endif
 
-                <input type="file" wire:model="newImages" multiple
-                    accept="image/*,.heic,.heif"
-                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
-                <div wire:loading wire:target="newImages" class="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                    <svg class="animate-spin w-3 h-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                    Uploading...
+                <div class="relative">
+                    <input type="file" wire:model="newImages" multiple
+                        accept="image/*,.heic,.heif"
+                        class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+
+                    <div wire:loading wire:target="newImages"
+                        class="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center gap-2">
+                        <svg class="animate-spin w-6 h-6 text-brand-500" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                        <span class="text-xs font-medium text-brand-600">Uploading images, please wait...</span>
+                    </div>
                 </div>
+                @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
         </div>
@@ -100,16 +108,14 @@
                         class="rounded border-gray-300 text-brand-500 w-4 h-4">
                     <label for="is_published" class="text-sm text-gray-700">Published</label>
                 </div>
-                <button type="submit"
-                    class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2">
+                <button type="submit" wire:loading.attr="disabled"
+                    class="w-full bg-brand-500 hover:bg-brand-600 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center justify-center gap-2">
+                    <svg wire:loading class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
                     <span wire:loading.remove>Save Post</span>
-                    <span wire:loading class="flex items-center gap-2">
-                        <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                        </svg>
-                        Saving...
-                    </span>
+                    <span wire:loading>Saving & optimizing images...</span>
                 </button>
             </div>
 
