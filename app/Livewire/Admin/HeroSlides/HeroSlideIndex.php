@@ -13,7 +13,7 @@ class HeroSlideIndex extends Component
     use ImageUploadTrait;
 
     public ?int $deleteId = null;
-    public bool $confirmDelete = false;
+    public bool $showDeleteModal = false;
 
     public function toggleActive(int $id): void
     {
@@ -25,7 +25,7 @@ class HeroSlideIndex extends Component
     public function confirmDelete(int $id): void
     {
         $this->deleteId = $id;
-        $this->confirmDelete = true;
+        $this->showDeleteModal = true;
     }
 
     public function delete(): void
@@ -33,7 +33,7 @@ class HeroSlideIndex extends Component
         $slide = HeroSlide::findOrFail($this->deleteId);
         $this->deleteImage($slide->image_path);
         $slide->delete();
-        $this->confirmDelete = false;
+        $this->showDeleteModal = false;
         $this->dispatch('notify', message: 'Slide deleted.', type: 'success');
     }
 
