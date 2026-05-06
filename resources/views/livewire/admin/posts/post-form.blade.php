@@ -80,9 +80,15 @@
                     <img src="{{ $existingImage }}" alt="Cover" class="w-full h-32 object-cover rounded-lg mb-3">
                 @endif
                 @if($cover_image)
-                    <img src="{{ $cover_image->temporaryUrl() }}" alt="Preview" class="w-full h-32 object-cover rounded-lg mb-3">
+                    @if(in_array(strtolower($cover_image->getClientOriginalExtension()), ['jpg','jpeg','png','gif','webp','svg']))
+                        <img src="{{ $cover_image->temporaryUrl() }}" alt="Preview" class="w-full h-32 object-cover rounded-lg mb-3">
+                    @else
+                        <div class="w-full h-32 bg-gray-50 border border-gray-200 rounded-lg mb-3 flex items-center justify-center text-sm text-gray-500">
+                            {{ $cover_image->getClientOriginalName() }}
+                        </div>
+                    @endif
                 @endif
-                <input type="file" wire:model="cover_image" accept="image/*"
+                <input type="file" wire:model="cover_image" accept="image/*,.heic,.heif"
                     class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
                 <div wire:loading wire:target="cover_image" class="text-xs text-gray-400 mt-1">Uploading...</div>
             </div>

@@ -68,6 +68,7 @@ class PostForm extends Component
         ];
 
         if ($this->cover_image) {
+            $this->validate(['cover_image' => 'file|mimes:jpg,jpeg,png,gif,webp,svg,heic,heif|max:10240']);
             if ($this->existingImage) {
                 $this->deleteImage($this->existingImage);
             }
