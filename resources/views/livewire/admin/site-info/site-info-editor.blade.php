@@ -63,7 +63,7 @@
                     @if($info['logo_path'])
                         <img src="{{ $info['logo_path'] }}" alt="Logo" class="h-16 mb-2 border border-gray-100 rounded-lg p-1">
                     @endif
-                    @if($logo)
+                    @if($logo && in_array($logo->getClientOriginalExtension(), ['jpg','jpeg','png','gif','webp','svg']))
                         <img src="{{ $logo->temporaryUrl() }}" alt="Logo preview" class="h-16 mb-2 border border-gray-100 rounded-lg p-1">
                     @endif
                     <input type="file" wire:model="logo" accept="image/*"
@@ -74,8 +74,10 @@
                     @if($info['favicon_path'])
                         <img src="{{ $info['favicon_path'] }}" alt="Favicon" class="h-10 mb-2 border border-gray-100 rounded p-1">
                     @endif
-                    @if($favicon)
+                    @if($favicon && in_array($favicon->getClientOriginalExtension(), ['jpg','jpeg','png','gif','webp','svg']))
                         <img src="{{ $favicon->temporaryUrl() }}" alt="Favicon preview" class="h-10 mb-2 border border-gray-100 rounded p-1">
+                    @elseif($favicon)
+                        <p class="text-xs text-gray-500 mb-2">{{ $favicon->getClientOriginalName() }} selected</p>
                     @endif
                     <input type="file" wire:model="favicon" accept="image/*"
                         class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3">

@@ -32,7 +32,7 @@ class SiteInfoEditor extends Component
             $this->info['logo_path'] = $this->uploadImage($this->logo, 'branding');
         }
         if ($this->favicon) {
-            $this->validate(['favicon' => 'image|max:512']);
+            $this->validate(['favicon' => 'file|mimes:ico,png,jpg,jpeg,svg|max:512']);
             $this->info['favicon_path'] = $this->uploadImage($this->favicon, 'branding');
         }
 
