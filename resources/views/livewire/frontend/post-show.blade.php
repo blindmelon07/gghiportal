@@ -70,8 +70,9 @@
                 <div style="display:flex;gap:8px;margin-top:10px;overflow-x:auto;padding-bottom:4px">
                     @foreach($slideImages as $i => $img)
                     <button type="button" @click="current = {{ $i }}"
-                        :style="current === {{ $i }} ? 'outline:2px solid #0077b6;outline-offset:2px;opacity:1' : 'opacity:.5'"
-                        style="flex-shrink:0;width:72px;height:72px;border-radius:8px;overflow:hidden;border:none;cursor:pointer;padding:0;transition:opacity .2s">
+                        :style="current === {{ $i }}
+                            ? 'flex-shrink:0;width:72px;height:72px;border-radius:8px;overflow:hidden;border:none;cursor:pointer;padding:0;transition:all .2s;outline:2px solid #0077b6;outline-offset:2px;opacity:1'
+                            : 'flex-shrink:0;width:72px;height:72px;border-radius:8px;overflow:hidden;border:none;cursor:pointer;padding:0;transition:all .2s;opacity:.45'">
                         <img src="{{ $img->image_path }}" alt="Slide {{ $i + 1 }}"
                             style="width:100%;height:100%;object-fit:cover;display:block">
                     </button>
@@ -81,14 +82,14 @@
 
                 {{-- Lightbox --}}
                 <div x-show="lightbox"
+                    x-cloak
                     x-transition:enter="transition-opacity duration-200"
                     x-transition:enter-start="opacity-0"
                     x-transition:enter-end="opacity-100"
                     x-transition:leave="transition-opacity duration-150"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
-                    style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:16px"
-                    :style="lightbox ? 'display:flex' : 'display:none'"
+                    style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;padding:16px"
                     @click.self="lightbox = false">
 
                     <button type="button" @click="lightbox = false"
