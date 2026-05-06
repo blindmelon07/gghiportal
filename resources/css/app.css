@@ -57,6 +57,8 @@
     }
 }
 
+[x-cloak] { display: none !important; }
+
 /* Admin sidebar active state */
 .admin-nav-link.active {
     @apply bg-brand-700 text-white;

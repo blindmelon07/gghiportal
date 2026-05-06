@@ -19,6 +19,7 @@ class PostShow extends Component
     public function render()
     {
         return view('livewire.frontend.post-show', [
+            'slideImages' => $this->post->images()->orderBy('sort_order')->get(),
             'recentPosts' => Post::published()->where('id', '!=', $this->post->id)->latest('published_at')->limit(4)->get(),
         ])->title($this->post->title . ' — GSAC Hospital');
     }
