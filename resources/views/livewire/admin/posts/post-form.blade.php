@@ -14,7 +14,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-                    <input type="text" wire:model.live="title"
+                    <input type="text" wire:model.live.debounce.800ms="title"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 focus:border-transparent @error('title') border-red-400 @enderror">
                     @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
@@ -87,19 +87,21 @@
                     </div>
                 </template>
 
-                <input type="file" wire:model="newImages" multiple
-                    accept="image/*,.heic,.heif"
-                    @change="
-                        previews = [];
-                        Array.from($event.target.files).forEach(file => {
-                            if (file.type.startsWith('image/')) {
-                                const reader = new FileReader();
-                                reader.onload = e => previews.push(e.target.result);
-                                reader.readAsDataURL(file);
-                            }
-                        });
-                    "
-                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+                <div wire:ignore>
+                    <input type="file" wire:model="newImages" multiple
+                        accept="image/*,.heic,.heif"
+                        @change="
+                            previews = [];
+                            Array.from($event.target.files).forEach(file => {
+                                if (file.type.startsWith('image/')) {
+                                    const reader = new FileReader();
+                                    reader.onload = e => previews.push(e.target.result);
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        "
+                        class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-3 hover:border-brand-400 transition-colors cursor-pointer">
+                </div>
                 <div wire:loading wire:target="newImages" class="text-xs text-gray-400 mt-1">Processing...</div>
                 @error('newImages.*') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
