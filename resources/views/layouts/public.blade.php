@@ -109,8 +109,13 @@
                 </div>
             </div>
         </div>
-        <div class="mb-8 rounded-xl overflow-hidden bg-blue-800 h-28 flex items-center justify-center text-gray-400 text-sm">
-            📍 Purok 5 Brgy. Road, Balogo, Sorsogon
+        {{-- Google Maps --}}
+        <div class="mb-8 rounded-xl overflow-hidden" style="height:220px">
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.8926740493325!2d124.01072677793906!3d12.978715854687316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a0ef161256f7d3%3A0xba1c3fa747e5770f!2sGSAC%20General%20Hospital%20Inc.!5e0!3m2!1sen!2sus!4v1778058467156!5m2!1sen!2sus"
+                width="100%" height="220" style="border:0;display:block" allowfullscreen loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
         <div class="border-t border-blue-800 pt-6 text-center text-xs text-gray-500">
             &copy; {{ date('Y') }} GSAC General Hospital. All rights reserved.
