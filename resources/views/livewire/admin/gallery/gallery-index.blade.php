@@ -14,13 +14,15 @@
             <div class="flex-1 min-w-48">
                 <label class="block text-xs font-medium text-gray-600 mb-1">Select Images</label>
                 <input type="file" wire:model="images" multiple accept="image/*"
-                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-2 hover:border-brand-400 transition-colors">
+                    class="text-sm text-gray-500 w-full border border-dashed border-gray-300 rounded-lg p-2 hover:border-brand-400 transition-colors @error('images') border-red-400 @enderror">
                 <div wire:loading wire:target="images" class="text-xs text-gray-400 mt-1">Processing...</div>
+                @error('images') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                @error('images.*') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
             </div>
-            <button wire:click="upload"
+            <button wire:click="uploadImages"
                 class="bg-brand-500 hover:bg-brand-600 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-all">
-                <span wire:loading.remove wire:target="upload">Upload</span>
-                <span wire:loading wire:target="upload">Uploading...</span>
+                <span wire:loading.remove wire:target="uploadImages">Upload</span>
+                <span wire:loading wire:target="uploadImages">Uploading...</span>
             </button>
         </div>
     </div>
@@ -38,16 +40,24 @@
     {{-- Grid --}}
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         @forelse($galleryImages as $img)
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group relative">
+        <div wire:key="gallery-{{ $img->id }}" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group relative">
             <img src="{{ $img->image_path }}" alt="{{ $img->alt_text }}" class="w-full h-32 object-cover">
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors pointer-events-none"></div>
 
             @if($editingId === $img->id)
             <div class="p-2 space-y-1">
                 <input type="text" wire:model="editCaption" placeholder="Caption"
-                    class="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:ring-1 focus:ring-brand-500">
+                    class="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:ring-1 focus:ring-brand-500 @error('editCaption') border-red-400 @enderror">
+                @error('editCaption') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
                 <input type="text" wire:model="editAlt" placeholder="Alt text"
+                    class="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:ring-1 focus:ring-brand-500 @error('editAlt') border-red-400 @enderror">
+                @error('editAlt') <p class="text-xs text-red-500">{{ $message }}</p> @enderror
+                <select wire:model="editSection"
                     class="w-full border border-gray-300 rounded px-2 py-1 text-xs focus:ring-1 focus:ring-brand-500">
+                    <option value="facility">Facility</option>
+                    <option value="team">Team</option>
+                    <option value="events">Events</option>
+                </select>
                 <div class="flex gap-1 justify-end">
                     <button wire:click="saveEdit" class="text-xs bg-brand-500 text-white px-2 py-1 rounded">Save</button>
                     <button wire:click="$set('editingId', null)" class="text-xs text-gray-500 px-2 py-1">Cancel</button>

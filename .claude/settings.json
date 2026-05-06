@@ -6,7 +6,25 @@
       "Bash(composer require *)",
       "Bash(python3 -c ' *)",
       "Bash(./vendor/bin/pest tests/Feature/ --no-coverage)",
-      "Bash(./vendor/bin/pest tests/Feature/Frontend tests/Feature/Admin --no-coverage)"
+      "Bash(./vendor/bin/pest tests/Feature/Frontend tests/Feature/Admin --no-coverage)",
+      "PowerShell($json = Get-Content \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\vendor\\\\livewire\\\\livewire\\\\composer.json\" -Raw | ConvertFrom-Json; \"Name: $\\($json.name\\), Version: $\\($json.version\\)\"; Test-Path \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\config\\\\livewire.php\")",
+      "PowerShell(Select-String -Path \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\composer.lock\" -Pattern '\"livewire/livewire\"' -A 3)",
+      "PowerShell(Get-Content \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\.env\" | Where-Object { $_ -match \"APP_URL|LIVEWIRE\" })",
+      "PowerShell(Get-Content \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\storage\\\\logs\\\\laravel.log\" -Tail 80 | Where-Object { $_ -notmatch \"livewire:discover|livewire:version|livewire:stubs\" })",
+      "PowerShell($content = [System.IO.File]::ReadAllText\\(\"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\resources\\\\js\\\\app.js\"\\); \"Length: $\\($content.Length\\)\"; \"Content: '$content'\")",
+      "PowerShell($content = [System.IO.File]::ReadAllText\\(\"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\public\\\\build\\\\assets\\\\app-34mOoJaZ.js\"\\); \"Length: $\\($content.Length\\)\"; $content.Substring\\(0, [Math]::Min\\(300, $content.Length\\)\\))",
+      "Bash(php -l app/Livewire/Admin/Gallery/GalleryIndex.php)",
+      "Bash(php -l app/Livewire/Frontend/GallerySection.php)",
+      "Bash(php -l app/Livewire/Admin/Dashboard.php)",
+      "Bash(php -l app/Livewire/Admin/Posts/PostIndex.php)",
+      "Bash(php -l app/Livewire/Admin/Posts/PostForm.php)",
+      "Bash(php -l app/Livewire/Admin/HeroSlides/HeroSlideIndex.php)",
+      "Bash(php -l app/Livewire/Admin/HeroSlides/HeroSlideForm.php)",
+      "Bash(php -l app/Livewire/Admin/SiteInfo/SiteInfoEditor.php)",
+      "Bash(php -l app/Livewire/Admin/ContactMessages/MessageIndex.php)",
+      "Bash(php -l app/Livewire/Admin/ChangePassword.php)",
+      "Bash(php -r \"echo 'upload_max_filesize: ' . ini_get\\('upload_max_filesize'\\) . PHP_EOL; echo 'post_max_size: ' . ini_get\\('post_max_size'\\) . PHP_EOL; echo 'max_file_uploads: ' . ini_get\\('max_file_uploads'\\) . PHP_EOL;\")",
+      "Bash(Get-Content \"c:\\\\xampp2\\\\htdocs\\\\gghiportal\\\\resources\\\\js\\\\app.js\")"
     ]
   }
 }
