@@ -8,15 +8,16 @@ trait ImageUploadTrait
 {
     protected function uploadImage($file, string $folder): string
     {
-        $path = $file->store("public/{$folder}");
-        return Storage::url($path);
+        $path = $file->store($folder, 'public');
+        return Storage::disk('public')->url($path);
     }
 
     protected function deleteImage(?string $path): void
     {
         if ($path) {
-            $relativePath = str_replace('/storage/', 'public/', $path);
-            Storage::delete($relativePath);
+            $relativePath = ltrim(parse_url($path, PHP_URL_PATH), '/');
+            $relativePath = preg_replace('#^storage/#', '', $relativePath);
+            Storage::disk('public')->delete($relativePath);
         }
     }
 }
