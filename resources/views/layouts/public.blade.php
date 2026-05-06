@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title ?? 'GSAC General Hospital Inc.' }}</title>
     <meta name="description" content="GSAC General Hospital Inc. — Your Health, Our Priority. Serving Balogo, Sorsogon.">
+    @php $faviconPath = \App\Models\HospitalInfo::get('favicon_path'); @endphp
+    @if($faviconPath)
+        <link rel="icon" href="{{ $faviconPath }}">
+    @else
+        <link rel="icon" href="/favicon.ico">
+    @endif
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
