@@ -45,9 +45,9 @@ class HeroSlideForm extends Component
         $this->validate();
         $rules = [];
         if (! $this->slide?->exists) {
-            $rules['image'] = 'required|image|max:4096';
+            $rules['image'] = 'required|image|max:10240';
         } else {
-            $rules['image'] = 'nullable|image|max:4096';
+            $rules['image'] = 'nullable|image|max:10240';
         }
         $this->validate($rules);
 

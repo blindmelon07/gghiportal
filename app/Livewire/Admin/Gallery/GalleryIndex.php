@@ -24,7 +24,7 @@ class GalleryIndex extends Component
     public function upload(): void
     {
         $this->validate([
-            'images.*' => 'image|max:4096',
+            'images.*' => 'image|max:10240',
         ]);
 
         foreach ($this->images as $img) {
