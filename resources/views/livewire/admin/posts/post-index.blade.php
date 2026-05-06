@@ -84,13 +84,13 @@
     </div>
 
     {{-- Delete Confirm Modal --}}
-    @if($confirmDelete)
+    @if($showDeleteModal)
     <div class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4" x-data>
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
             <h3 class="font-bold text-gray-800 mb-2">Delete Post?</h3>
             <p class="text-sm text-gray-500 mb-6">This action cannot be undone. The cover image will also be removed.</p>
             <div class="flex gap-3 justify-end">
-                <button wire:click="$set('confirmDelete', false)"
+                <button wire:click="$set('showDeleteModal', false)"
                     class="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800">Cancel</button>
                 <button wire:click="delete()"
                     class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-xl transition-colors">

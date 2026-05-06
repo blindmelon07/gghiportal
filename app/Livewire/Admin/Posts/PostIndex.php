@@ -17,7 +17,7 @@ class PostIndex extends Component
     public string $status = '';
     public string $sort = 'newest';
     public array $selected = [];
-    public bool $confirmDelete = false;
+    public bool $showDeleteModal = false;
     public ?int $deleteId = null;
 
     public function updatingSearch(): void { $this->resetPage(); }
@@ -35,7 +35,7 @@ class PostIndex extends Component
     public function confirmDelete(int $id): void
     {
         $this->deleteId = $id;
-        $this->confirmDelete = true;
+        $this->showDeleteModal = true;
     }
 
     public function delete(?int $id = null): void
@@ -44,7 +44,7 @@ class PostIndex extends Component
         $post = Post::findOrFail($id);
         $this->deleteImage($post->cover_image_path);
         $post->delete();
-        $this->confirmDelete = false;
+        $this->showDeleteModal = false;
         $this->deleteId = null;
         $this->dispatch('notify', message: 'Post deleted.', type: 'success');
     }
@@ -52,12 +52,13 @@ class PostIndex extends Component
     public function bulkDelete(): void
     {
         $posts = Post::whereIn('id', $this->selected)->get();
+        $count = $posts->count();
         foreach ($posts as $post) {
             $this->deleteImage($post->cover_image_path);
             $post->delete();
         }
         $this->selected = [];
-        $this->dispatch('notify', message: count($this->selected) . ' posts deleted.', type: 'success');
+        $this->dispatch('notify', message: $count . ' posts deleted.', type: 'success');
     }
 
     public function render()
